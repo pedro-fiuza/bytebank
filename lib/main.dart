@@ -93,15 +93,14 @@ class Publisher extends StatelessWidget {
 }
 
 class TransactionsList extends StatelessWidget {
+  final List<Transaction?> _transactions = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: <Widget>[
-          TransactionItem('teste1', 'fakedesc'),
-          TransactionItem('teste2', 'fakedesc'),
-          TransactionItem('teste3', 'fakedesc')
-        ],
+      body: ListView.builder(
+        itemCount: _transactions.length,
+        itemBuilder: (context, i) => TransactionItem(_transactions[i]),
       ),
       appBar: AppBar(
         title: Text('Transactions'),
@@ -115,7 +114,7 @@ class TransactionsList extends StatelessWidget {
               builder: (context) => TransactionForm(),
             ),
           );
-          future.then((transaction) => debugPrint('$transaction'));
+          future.then((transaction) => _transactions.add(transaction));
         },
       ),
     );
@@ -130,23 +129,22 @@ class Transaction {
 
   @override
   String toString() {
-    return '${this.accountNumber}, ${this.value}';
+    return '$accountNumber, $value';
   }
 }
 
 class TransactionItem extends StatelessWidget {
-  final String title;
-  final String smallDescription;
+  final Transaction? transaction;
 
-  const TransactionItem(this.title, this.smallDescription);
+  const TransactionItem(this.transaction);
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
         leading: Icon(Icons.local_hospital),
-        title: Text(title),
-        subtitle: Text(smallDescription),
+        title: Text(transaction!.value.toString()),
+        subtitle: Text(transaction!.accountNumber.toString()),
       ),
     );
   }
