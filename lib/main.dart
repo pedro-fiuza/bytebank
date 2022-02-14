@@ -16,6 +16,10 @@ class ByteBankApp extends StatelessWidget {
 }
 
 class TransactionForm extends StatelessWidget {
+  final TextEditingController _controllerAccountNumberField =
+      TextEditingController();
+  final TextEditingController _controllerValueField = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,6 +28,7 @@ class TransactionForm extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
+              controller: _controllerAccountNumberField,
               style: TextStyle(
                 fontSize: 24.0,
               ),
@@ -37,6 +42,7 @@ class TransactionForm extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
+              controller: _controllerValueField,
               style: TextStyle(
                 fontSize: 24.0,
               ),
@@ -48,8 +54,16 @@ class TransactionForm extends StatelessWidget {
             ),
           ),
           ElevatedButton(
-            onPressed: () {},
             child: Text('Send'),
+            onPressed: () {
+              final int? accountNumber =
+                  int.tryParse(_controllerAccountNumberField.text);
+              final double? value = double.tryParse(_controllerValueField.text);
+              if (accountNumber != null && value != null) {
+                final createdTransaction = Transaction(accountNumber, value);
+                debugPrint('$createdTransaction');
+              }
+            },
           ),
         ],
       ),
@@ -80,6 +94,13 @@ class TransactionsList extends StatelessWidget {
       ),
     );
   }
+}
+
+class Transaction {
+  final int accountNumber;
+  final double value;
+
+  Transaction(this.accountNumber, this.value);
 }
 
 class TransactionItem extends StatelessWidget {
