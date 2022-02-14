@@ -2,22 +2,9 @@ import 'package:flutter/material.dart';
 
 void main() => runApp(MaterialApp(
       home: Scaffold(
-        body: Column(
-          children: [
-            Card(
-                child: ListTile(
-              leading: Icon(Icons.local_hospital),
-              title: Text('Teste'),
-            )),
-            Card(
-                child: ListTile(
-              leading: Icon(Icons.local_hospital),
-              title: Text('teste2'),
-            )),
-          ],
-        ),
+        body: TransactionsList(),
         appBar: AppBar(
-          title: Text('Transferencias'),
+          title: Text('Transactions'),
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () => print('add'),
@@ -25,3 +12,34 @@ void main() => runApp(MaterialApp(
         ),
       ),
     ));
+
+class TransactionsList extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: <Widget>[
+        TransactionItem('teste1', 'fakedesc'),
+        TransactionItem('teste2', 'fakedesc'),
+        TransactionItem('teste3', 'fakedesc')
+      ],
+    );
+  }
+}
+
+class TransactionItem extends StatelessWidget {
+  final String title;
+  final String smallDescription;
+
+  const TransactionItem(this.title, this.smallDescription);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: ListTile(
+        leading: Icon(Icons.local_hospital),
+        title: Text(title),
+        subtitle: Text(smallDescription),
+      ),
+    );
+  }
+}
