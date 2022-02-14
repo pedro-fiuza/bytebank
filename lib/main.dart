@@ -9,7 +9,7 @@ class ByteBankApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: TransactionForm(),
+        body: TransactionsList(),
       ),
     );
   }
@@ -38,9 +38,7 @@ class TransactionForm extends StatelessWidget {
           ),
           ElevatedButton(
             child: Text('Send'),
-            onPressed: () {
-              _createTransaction(context);
-            },
+            onPressed: () => _createTransaction(context),
           ),
         ],
       ),
@@ -56,11 +54,12 @@ class TransactionForm extends StatelessWidget {
     if (accountNumber != null && value != null) {
       final createdTransaction = Transaction(accountNumber, value);
       debugPrint('$createdTransaction');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Succesfully'),
-        ),
-      );
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //     content: Text('Succesfully'),
+      //   ),
+      // );
+      Navigator.pop(context, createdTransaction);
     }
   }
 }
@@ -108,8 +107,16 @@ class TransactionsList extends StatelessWidget {
         title: Text('Transactions'),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => print('add'),
         child: Icon(Icons.add),
+        onPressed: () {
+          final Future<Transaction?> future = Navigator.push<Transaction>(
+            context,
+            MaterialPageRoute(
+              builder: (context) => TransactionForm(),
+            ),
+          );
+          future.then((transaction) => debugPrint('$transaction'));
+        },
       ),
     );
   }
@@ -120,6 +127,11 @@ class Transaction {
   final double value;
 
   Transaction(this.accountNumber, this.value);
+
+  @override
+  String toString() {
+    return '${this.accountNumber}, ${this.value}';
+  }
 }
 
 class TransactionItem extends StatelessWidget {
