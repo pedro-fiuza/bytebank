@@ -24,56 +24,70 @@ class TransactionForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              controller: _controllerAccountNumberField,
-              style: TextStyle(
-                fontSize: 24.0,
-              ),
-              decoration: InputDecoration(
-                labelText: 'Account Number',
-                hintText: '0000',
-              ),
-              keyboardType: TextInputType.number,
-            ),
+        children: <Widget>[
+          Publisher(
+            controller: _controllerAccountNumberField,
+            title: 'Account Number',
+            subtitle: '0000',
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              controller: _controllerValueField,
-              style: TextStyle(
-                fontSize: 24.0,
-              ),
-              decoration: InputDecoration(
-                labelText: 'Value',
-                hintText: '0.00',
-              ),
-              keyboardType: TextInputType.number,
-            ),
+          Publisher(
+            controller: _controllerValueField,
+            title: 'Value',
+            subtitle: '0.00',
+            icon: Icons.monetization_on,
           ),
           ElevatedButton(
             child: Text('Send'),
             onPressed: () {
-              final int? accountNumber =
-                  int.tryParse(_controllerAccountNumberField.text);
-              final double? value = double.tryParse(_controllerValueField.text);
-              if (accountNumber != null && value != null) {
-                final createdTransaction = Transaction(accountNumber, value);
-                debugPrint('$createdTransaction');
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Succesfully'),
-                  ),
-                );
-              }
+              _createTransaction(context);
             },
           ),
         ],
       ),
       appBar: AppBar(
         title: Text('teste'),
+      ),
+    );
+  }
+
+  void _createTransaction(BuildContext context) {
+    final int? accountNumber = int.tryParse(_controllerAccountNumberField.text);
+    final double? value = double.tryParse(_controllerValueField.text);
+    if (accountNumber != null && value != null) {
+      final createdTransaction = Transaction(accountNumber, value);
+      debugPrint('$createdTransaction');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Succesfully'),
+        ),
+      );
+    }
+  }
+}
+
+class Publisher extends StatelessWidget {
+  final TextEditingController? controller;
+  final String? title;
+  final String? subtitle;
+  final IconData? icon;
+
+  Publisher({this.controller, this.title, this.subtitle, this.icon});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: TextField(
+        controller: controller,
+        style: TextStyle(
+          fontSize: 24.0,
+        ),
+        decoration: InputDecoration(
+          icon: Icon(icon),
+          labelText: title,
+          hintText: subtitle,
+        ),
+        keyboardType: TextInputType.number,
       ),
     );
   }
