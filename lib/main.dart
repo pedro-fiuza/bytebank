@@ -62,6 +62,11 @@ class TransactionForm extends StatelessWidget {
               if (accountNumber != null && value != null) {
                 final createdTransaction = Transaction(accountNumber, value);
                 debugPrint('$createdTransaction');
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Succesfully'),
+                  ),
+                );
               }
             },
           ),
