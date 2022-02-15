@@ -8,9 +8,23 @@ class ByteBankApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        body: TransactionsList(),
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: Colors.green,
+        ).copyWith(
+          secondary: Colors.blueAccent[700],
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            primary: Colors.blueAccent[700],
+          ),
+        ),
+        buttonTheme: ButtonThemeData(
+          buttonColor: Colors.blueAccent[700],
+          textTheme: ButtonTextTheme.primary,
+        ),
       ),
+      home: TransactionsList(),
     );
   }
 }
@@ -50,7 +64,7 @@ class TransactionFormState extends State<TransactionForm> {
         ),
       ),
       appBar: AppBar(
-        title: Text('teste'),
+        title: Text('Add transaction'),
       ),
     );
   }
