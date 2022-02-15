@@ -15,7 +15,12 @@ class ByteBankApp extends StatelessWidget {
   }
 }
 
-class TransactionForm extends StatelessWidget {
+class TransactionForm extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => TransactionFormState();
+}
+
+class TransactionFormState extends State<TransactionForm> {
   final TextEditingController _controllerAccountNumberField =
       TextEditingController();
   final TextEditingController _controllerValueField = TextEditingController();
@@ -23,24 +28,26 @@ class TransactionForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: <Widget>[
-          Publisher(
-            controller: _controllerAccountNumberField,
-            title: 'Account Number',
-            subtitle: '0000',
-          ),
-          Publisher(
-            controller: _controllerValueField,
-            title: 'Value',
-            subtitle: '0.00',
-            icon: Icons.monetization_on,
-          ),
-          ElevatedButton(
-            child: Text('Send'),
-            onPressed: () => _createTransaction(context),
-          ),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Publisher(
+              controller: _controllerAccountNumberField,
+              title: 'Account Number',
+              subtitle: '0000',
+            ),
+            Publisher(
+              controller: _controllerValueField,
+              title: 'Value',
+              subtitle: '0.00',
+              icon: Icons.monetization_on,
+            ),
+            ElevatedButton(
+              child: Text('Send'),
+              onPressed: () => _createTransaction(context),
+            ),
+          ],
+        ),
       ),
       appBar: AppBar(
         title: Text('teste'),
@@ -117,7 +124,7 @@ class TransactionsListState extends State<TransactionsList> {
           );
           future.then((transaction) {
             if (transaction != null) {
-              widget._transactions.add(transaction);
+              setState(() => widget._transactions.add(transaction));
               debugPrint(widget._transactions.toString());
             }
           });
