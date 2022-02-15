@@ -92,15 +92,16 @@ class Publisher extends StatelessWidget {
   }
 }
 
-class TransactionsList extends StatelessWidget {
-  final List<Transaction?> _transactions = [];
-
+class TransactionsListState extends State<TransactionsList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView.builder(
-        itemCount: _transactions.length,
-        itemBuilder: (context, i) => TransactionItem(_transactions[i]),
+        itemCount: widget._transactions.length,
+        itemBuilder: (context, i) {
+          final transaction = widget._transactions[i];
+          return TransactionItem(transaction);
+        },
       ),
       appBar: AppBar(
         title: Text('Transactions'),
@@ -108,17 +109,29 @@ class TransactionsList extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
-          final Future<Transaction?> future = Navigator.push<Transaction>(
+          final Future<Transaction?> future = Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => TransactionForm(),
             ),
           );
-          future.then((transaction) => _transactions.add(transaction));
+          future.then((transaction) {
+            if (transaction != null) {
+              widget._transactions.add(transaction);
+              debugPrint(widget._transactions.toString());
+            }
+          });
         },
       ),
     );
   }
+}
+
+class TransactionsList extends StatefulWidget {
+  final List<Transaction> _transactions = [];
+
+  @override
+  State<StatefulWidget> createState() => TransactionsListState();
 }
 
 class Transaction {
@@ -134,7 +147,7 @@ class Transaction {
 }
 
 class TransactionItem extends StatelessWidget {
-  final Transaction? transaction;
+  final Transaction transaction;
 
   const TransactionItem(this.transaction);
 
@@ -143,8 +156,8 @@ class TransactionItem extends StatelessWidget {
     return Card(
       child: ListTile(
         leading: Icon(Icons.local_hospital),
-        title: Text(transaction!.value.toString()),
-        subtitle: Text(transaction!.accountNumber.toString()),
+        title: Text(transaction.value.toString()),
+        subtitle: Text(transaction.accountNumber.toString()),
       ),
     );
   }
